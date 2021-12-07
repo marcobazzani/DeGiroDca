@@ -11,7 +11,11 @@ provider:
   runtime: python3.8
   region: eu-west-1
   lambdaHashingVersion: 20201221
-  stage: dev
+  environment:
+    ENVIRONMENT: "degiro-dca-environment"
+    APPLICATION: "serverless-degiro-dca-${sls:stage}"
+    CONFIGURATION: "degiro-dca-app-profile-${sls:stage}"
+    STAGE: ${sls:stage}
   
   iam:
     role:
@@ -29,13 +33,13 @@ resources:
     DeGiroDcaApplication:
       Type: AWS::AppConfig::Application
       Properties:
-        Name: "serverless-degiro-dca-${self:provider.stage}"
+        Name: "serverless-degiro-dca-${sls:stage}"
         Description: "Degiro Dollar Cost Averaging."
         Tags:
           - Key: App
             Value: "DeGiroDcaApplication"
           - Key: Stage
-            Value: "${self:provider.stage}"
+            Value: "${sls:stage}"
     # the application environment
     DeGiroDcaEnvironment:
       Type: AWS::AppConfig::Environment
@@ -47,13 +51,13 @@ resources:
           - Key: App
             Value: "DeGiroDcaApplication"
           - Key: Stage
-            Value: "${self:provider.stage}"
+            Value: "${sls:stage}"
     # configuration profile
     DeGiroDcaAppConfigProfile:
       Type: AWS::AppConfig::ConfigurationProfile
       Properties:
         ApplicationId: !Ref DeGiroDcaApplication
-        Name: "degiro-dca-app-profile-${self:provider.stage}"
+        Name: "degiro-dca-app-profile-${sls:stage}"
         LocationUri: "hosted"
     # configuration
     DeGiroDcaConfigurationVersion:
@@ -78,8 +82,8 @@ resources:
     DeploymentStrategy:
       Type: AWS::AppConfig::DeploymentStrategy
       Properties:
-        Name: "deployment-strategy-${self:provider.stage}"
-        Description: "DeGiro Dca deployment strategy ${self:provider.stage}"
+        Name: "deployment-strategy-${sls:stage}"
+        Description: "DeGiro Dca deployment strategy ${sls:stage}"
         DeploymentDurationInMinutes: 0
         FinalBakeTimeInMinutes: 0
         GrowthFactor: 100
@@ -89,7 +93,7 @@ resources:
           - Key: App
             Value: "DeGiroDcaApplication"
           - Key: Stage
-            Value: "${self:provider.stage}"
+            Value: "${sls:stage}"
     # deployment
     DeGiroDcaDeployment:
       Type: AWS::AppConfig::Deployment
@@ -99,12 +103,12 @@ resources:
         DeploymentStrategyId: !Ref DeploymentStrategy
         ConfigurationProfileId: !Ref DeGiroDcaAppConfigProfile
         ConfigurationVersion: "1"
-        Description: "degiro dca deployment ${self:provider.stage}"
+        Description: "degiro dca deployment ${sls:stage}"
         Tags:
           - Key: App
             Value: "DeGiroDcaApplication"
           - Key: Stage
-            Value: "${self:provider.stage}"
+            Value: "${sls:stage}"
 
 
 functions:
