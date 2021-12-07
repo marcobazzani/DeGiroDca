@@ -11,6 +11,14 @@ provider:
   runtime: python3.9
   region: eu-west-1
   lambdaHashingVersion: 20201221
+  
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "ssm:GetParameter"
+          Resource: "*"
 
 functions:
   rateHandler:
@@ -24,13 +32,15 @@ functions:
   #     # Invoke Lambda function every 2nd minute from Mon-Fri
   #     - schedule: cron(0 0 ? * 7L *)
 
-custom:
-  pythonRequirements:
-    # zip: true
-    useDownloadCache: true
-    useStaticCache: true
-    # invalidateCaches: true
 
 plugins:
   - serverless-offline
   - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    zip: true
+    # useDownloadCache: true
+    # useStaticCache: true
+    invalidateCaches: true
+    dockerizePip: true

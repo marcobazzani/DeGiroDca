@@ -1,3 +1,8 @@
+try:
+  import unzip_requirements
+except ImportError:
+  pass
+
 from os import write
 import degiroapi
 from degiroapi.product import Product
@@ -5,7 +10,7 @@ from degiroapi.order import Order
 from degiroapi.utils import pretty_json
 from datetime import date, datetime, timedelta
 from discord_webhook import DiscordWebhook, DiscordEmbed
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import json, logging, csv, random
 import sys
 import boto3
@@ -14,7 +19,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-ssm = boto3.client('ssm')
+ssm_client = boto3.client('ssm')
 
 def run(event, context):
     current_time = datetime.now().time()
@@ -32,9 +37,10 @@ class DeGIRO_PAC():
     
     def __init__(self):
         logging.info('[CONFIG FILE SUCCESSFULLY OPENED]')
-        self.username = ssm_client.get_parameter(Name="/degirodca/account/username")
-        self.password = ssm_client.get_parameter(Name="/degirodca/account/password")
-        self.amount = int(ssm_client.get_parameter(Name="/degirodca/amount"))
+        self.username = ssm_client.get_parameter(Name="/degirodca/account/username",WithDecryption=True)['Parameter']['Value']
+        self.password = ssm_client.get_parameter(Name="/degirodca/account/password",WithDecryption=True)['Parameter']['Value']
+        self.amount = int(ssm_client.get_parameter(Name="/degirodca/amount",WithDecryption=True)['Parameter']['Value'])
+
         if self.username == "" or self.password == "":
             logging.warning('[MISSING USERNAME OR PASSWORD FROM CONFIG FILE]')
             self.send_webhook('ERROR', 'MISSING USERNAME OR PASSWORD FROM CONFIG FILE', 'ff0000')
@@ -109,8 +115,8 @@ class DeGIRO_PAC():
                     sizes.append(float(data['value']))
                     colors.append(color)
                 
-        plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
-        plt.savefig('outcome/portfolio_status.png')
+        #plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
+        #plt.savefig('outcome/portfolio_status.png')
         #plt.show()
         
     def logout(self): # logout from de giro account
