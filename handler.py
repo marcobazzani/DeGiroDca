@@ -10,7 +10,7 @@ from degiroapi.order import Order
 from degiroapi.utils import pretty_json
 from datetime import date, datetime, timedelta
 from discord_webhook import DiscordWebhook, DiscordEmbed
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import json, logging, csv, random
 import sys
 import boto3
