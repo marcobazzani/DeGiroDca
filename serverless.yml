@@ -11,6 +11,7 @@ provider:
   runtime: python3.8
   region: eu-west-1
   lambdaHashingVersion: 20201221
+  stage: dev
   
   iam:
     role:
@@ -18,7 +19,93 @@ provider:
         - Effect: "Allow"
           Action:
             - "ssm:GetParameter"
+            - "appconfig:GetConfiguration"
           Resource: "*"
+
+
+resources:
+  Resources:
+    # the application
+    DeGiroDcaApplication:
+      Type: AWS::AppConfig::Application
+      Properties:
+        Name: "serverless-degiro-dca-${self:provider.stage}"
+        Description: "Degiro Dollar Cost Averaging."
+        Tags:
+          - Key: App
+            Value: "DeGiroDcaApplication"
+          - Key: Stage
+            Value: "${self:provider.stage}"
+    # the application environment
+    DeGiroDcaEnvironment:
+      Type: AWS::AppConfig::Environment
+      Properties:
+        ApplicationId: !Ref DeGiroDcaApplication
+        Name: "degiro-dca-environment"
+        Description: "DeGiro Dca Environment"
+        Tags:
+          - Key: App
+            Value: "DeGiroDcaApplication"
+          - Key: Stage
+            Value: "${self:provider.stage}"
+    # configuration profile
+    DeGiroDcaAppConfigProfile:
+      Type: AWS::AppConfig::ConfigurationProfile
+      Properties:
+        ApplicationId: !Ref DeGiroDcaApplication
+        Name: "degiro-dca-app-profile-${self:provider.stage}"
+        LocationUri: "hosted"
+    # configuration
+    DeGiroDcaConfigurationVersion:
+      Type: AWS::AppConfig::HostedConfigurationVersion
+      Properties:
+        ApplicationId: !Ref DeGiroDcaApplication
+        ConfigurationProfileId: !Ref DeGiroDcaAppConfigProfile
+        Description: "DeGiro Dca Application Config"
+        Content: !Sub |
+            {   
+                "amount":5000,
+                "ETF":[
+                    {"id":"4622755", "percentile":"33.0"},
+                    {"id":"4622784", "percentile":"33.0"},
+                    {"id":"4622969", "percentile":"34.0"}
+                ],
+                "webhook":""
+            }
+        ContentType: "application/json"
+        LatestVersionNumber: 1
+    # deployment strategy
+    DeploymentStrategy:
+      Type: AWS::AppConfig::DeploymentStrategy
+      Properties:
+        Name: "deployment-strategy-${self:provider.stage}"
+        Description: "DeGiro Dca deployment strategy ${self:provider.stage}"
+        DeploymentDurationInMinutes: 0
+        FinalBakeTimeInMinutes: 0
+        GrowthFactor: 100
+        GrowthType: LINEAR
+        ReplicateTo: NONE
+        Tags:
+          - Key: App
+            Value: "DeGiroDcaApplication"
+          - Key: Stage
+            Value: "${self:provider.stage}"
+    # deployment
+    DeGiroDcaDeployment:
+      Type: AWS::AppConfig::Deployment
+      Properties:
+        ApplicationId: !Ref DeGiroDcaApplication
+        EnvironmentId: !Ref DeGiroDcaEnvironment
+        DeploymentStrategyId: !Ref DeploymentStrategy
+        ConfigurationProfileId: !Ref DeGiroDcaAppConfigProfile
+        ConfigurationVersion: "1"
+        Description: "degiro dca deployment ${self:provider.stage}"
+        Tags:
+          - Key: App
+            Value: "DeGiroDcaApplication"
+          - Key: Stage
+            Value: "${self:provider.stage}"
+
 
 functions:
   rateHandler:
@@ -38,7 +125,7 @@ plugins:
   - serverless-python-requirements
 custom:
   pythonRequirements:
-    zip: true
+    zip: false
     # useDownloadCache: true
     # useStaticCache: true
     invalidateCaches: true
