@@ -1,0 +1,36 @@
+org: marcobazzani
+app: degirodca
+service: DeGiroDca
+
+frameworkVersion: '2 || 3'
+
+variablesResolutionMode: 20210326
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-1
+  lambdaHashingVersion: 20201221
+
+functions:
+  rateHandler:
+    handler: handler.run
+    # events:
+    #   # Invoke Lambda function every minute
+    #   - schedule: rate(1 minute)
+  # cronHandler:
+  #   handler: handler.run
+  #   events:
+  #     # Invoke Lambda function every 2nd minute from Mon-Fri
+  #     - schedule: cron(0 0 ? * 7L *)
+
+custom:
+  pythonRequirements:
+    # zip: true
+    useDownloadCache: true
+    useStaticCache: true
+    # invalidateCaches: true
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
