@@ -3,7 +3,7 @@ try:
 except ImportError:
   pass
 
-from os import write
+import os
 import degiroapi
 from degiroapi.product import Product
 from degiroapi.order import Order
@@ -19,8 +19,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+appconfig = boto3.client('appconfig')
 ssm_client = boto3.client('ssm')
-
 def run(event, context):
     current_time = datetime.now().time()
     name = context.function_name
@@ -37,10 +37,21 @@ class DeGIRO_PAC():
     
     def __init__(self):
         logging.info('[CONFIG FILE SUCCESSFULLY OPENED]')
+        json_dump = appconfig.get_configuration(
+            Application=os.environ['APPLICATION'],
+            Environment=os.environ['ENVIRONMENT'],
+            Configuration=os.environ['CONFIGURATION'],
+            ClientId="lambda"
+        )['Content'].read().decode()
+
+        self.config = json.loads(json_dump)
+
+        logging.info('[CONFIG FILE SUCCESSFULLY OPENED]')
+        
         self.username = ssm_client.get_parameter(Name="/degirodca/account/username",WithDecryption=True)['Parameter']['Value']
         self.password = ssm_client.get_parameter(Name="/degirodca/account/password",WithDecryption=True)['Parameter']['Value']
-        self.amount = int(ssm_client.get_parameter(Name="/degirodca/amount",WithDecryption=True)['Parameter']['Value'])
 
+        self.amount = int(self.config['amount'])
         if self.username == "" or self.password == "":
             logging.warning('[MISSING USERNAME OR PASSWORD FROM CONFIG FILE]')
             self.send_webhook('ERROR', 'MISSING USERNAME OR PASSWORD FROM CONFIG FILE', 'ff0000')
