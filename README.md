@@ -1,7 +1,9 @@
 # DeGiroDca (Dollar Cost Averaging)
 DeGiro Lambda Function for Dollar Cost Averaging
 
-## If you find this code usefull [DONATE 1 Euro](https://www.paypal.com/donate/?hosted_button_id=CZXXCPF8BTUD6)
+### If you find this code usefull you can donate here:
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=CZXXCPF8BTUD6)
 
 Inspired by https://github.com/CristaudoGiuseppe/DeGIRO-PAC
 
