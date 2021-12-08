@@ -73,8 +73,7 @@ resources:
                     {"id":"4622755", "percentile":"33.0"},
                     {"id":"4622784", "percentile":"33.0"},
                     {"id":"4622969", "percentile":"34.0"}
-                ],
-                "webhook":""
+                ]
             }
         ContentType: "application/json"
         LatestVersionNumber: 1
