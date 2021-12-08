@@ -13,9 +13,8 @@ You need an AWS account
 
 You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) to build it
 
-open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersion resource
-
-```
+1. open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersion resource 
+   ```
             {   
                 "amount":5000,
                 "ETF":[
@@ -24,25 +23,24 @@ open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersio
                     {"id":"4622969", "percentile":"34.0"}
                 ]
             }
-```
-amount is the amount to invest monthly
+   ```
+   amount is the amount to invest monthly
+   Ids are DeGiro Ids
 
-Ids are DeGiro Ids
+1. Go to Degiro 
 
-Go to Degiro 
+1. search for your product
 
-search for your product
+   for example MSCI World 
 
-for example MSCI World 
+1. Copy the ID in the URL and set the percentage 
 
-Copy the ID in the URL
+   https://trader.degiro.nl/trader/#/products/4622784/overview
 
-https://trader.degiro.nl/trader/#/products/4622784/overview
+1. configure your aws login through `aws configure`
 
-configure your aws login through `aws configure`
+1. run `setup.sh username password` of your degiro account
 
-run `setup.sh username password` of your degiro account
+1. [install serverless framework](https://www.serverless.com/framework/docs/getting-started)  
 
-[install serverless framework](https://www.serverless.com/framework/docs/getting-started)  
-
-run `sls deploy --use-local-credentials`
+1. run `sls deploy --use-local-credentials`
