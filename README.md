@@ -13,6 +13,7 @@ You need an AWS account
 
 You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) to build it
 
+1. `git clone https://github.com/marcobazzani/DeGiroDca.git`
 1. open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersion resource 
    ```
             {   
