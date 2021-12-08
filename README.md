@@ -19,4 +19,4 @@ run `setup.sh username password` of your degiro account
 
 [install serverless framework](https://www.serverless.com/framework/docs/getting-started)  
 
-run sls deploy --use-local-credentials
+run `sls deploy --use-local-credentials`
