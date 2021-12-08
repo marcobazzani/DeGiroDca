@@ -35,8 +35,12 @@ You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) t
    for example MSCI World 
 
 1. Copy the ID in the URL and set the percentage 
-
-   https://trader.degiro.nl/trader/#/products/4622784/overview
+   
+   for example MSCI World on Milan Stock Exchange is
+   
+   `https://trader.degiro.nl/trader/#/products/`4622784`/overview`
+   
+   put 4622784 as id in the config
 
 1. configure your aws login through `aws configure`
 
