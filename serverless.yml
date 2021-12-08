@@ -115,6 +115,7 @@ functions:
     handler: handler.run
     events:
       - schedule: cron(0 12 ? * 2#1 *)
+      - http: 'POST /buy'
 
 
 plugins:
