@@ -114,7 +114,6 @@ functions:
   degirodca:
     handler: handler.run
     events:
-      # Invoke Lambda function every 2nd minute from Mon-Fri
       - schedule: cron(0 12 ? * 2L *)
 
 
