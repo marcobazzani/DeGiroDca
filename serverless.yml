@@ -114,7 +114,7 @@ functions:
   degirodca:
     handler: handler.run
     events:
-      - schedule: cron(0 12 ? * 2L *)
+      - schedule: cron(0 12 ? * 2#1 *)
 
 
 plugins:

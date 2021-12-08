@@ -44,3 +44,6 @@ You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) t
 1. [install serverless framework](https://www.serverless.com/framework/docs/getting-started)  
 
 1. run `sls deploy --use-local-credentials`
+
+by defult it will buy the configured amount the first monday of the month see schedule in serverless.yml to change it according [AWS Doc](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html) you can use  [Cron expression describer
+](https://en.rakko.tools/tools/88/) to help with the syntax (keep in mind that AWS doesn't support seconds so you have to prepend a 0 for seconds in the expression)
