@@ -27,10 +27,18 @@ def run(event, context):
     name = context.function_name
     logger.info("Your cron function " + name + " ran at " + str(current_time))
     try:
-        return DeGiroDca(context.function_name).run()
+        return  {
+            "isBase64Encoded": False,
+            "statusCode": 200,
+            "headers": {},
+            "body": json.dumps(DeGiroDca(context.function_name).run())
+        }
+
     except DeGiroDcaException as e:
         return {
+            "isBase64Encoded": False,
             "statusCode": 500,
+            "headers": {},
             "body": e
         }
 

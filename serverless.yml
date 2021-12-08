@@ -123,7 +123,7 @@ plugins:
   - serverless-python-requirements
 custom:
   pythonRequirements:
-    zip: false
+    zip: true
     # useDownloadCache: true
     # useStaticCache: true
     invalidateCaches: true
