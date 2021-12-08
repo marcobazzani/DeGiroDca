@@ -15,6 +15,30 @@ You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) t
 
 open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersion resource
 
+```
+            {   
+                "amount":5000,
+                "ETF":[
+                    {"id":"4622755", "percentile":"33.0"},
+                    {"id":"4622784", "percentile":"33.0"},
+                    {"id":"4622969", "percentile":"34.0"}
+                ]
+            }
+```
+amount is the amount to invest monthly
+
+Ids are DeGiro Ids
+
+Go to Degiro 
+
+search for your product
+
+for example MSCI World 
+
+Copy the ID in the URL
+
+https://trader.degiro.nl/trader/#/products/4622784/overview
+
 configure your aws login through `aws configure`
 
 run `setup.sh username password` of your degiro account
