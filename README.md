@@ -11,6 +11,8 @@ Inspired by https://github.com/CristaudoGiuseppe/DeGIRO-PAC
 
 You need an AWS account
 
+You also need [Docker Desktop](https://www.docker.com/products/docker-desktop) to build it
+
 open serverless.yml and edit the Content section in DeGiroDcaConfigurationVersion resource
 
 configure your aws login through `aws configure`
